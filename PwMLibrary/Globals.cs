@@ -32,5 +32,8 @@ namespace PwM_Library
         private static readonly string s_accountName = Environment.UserName;
         public static readonly string passwordManagerDirectory = $"{s_rootPath}Users\\{s_accountName}\\AppData\\Local\\PwM\\";
         public static readonly string registryPath = "SOFTWARE\\PwM";
+        public static int vaultsCount { get; set; }
+        public static bool vaultOpen = false;
+
     }
 }

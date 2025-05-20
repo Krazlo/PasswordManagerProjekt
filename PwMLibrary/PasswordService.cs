@@ -60,6 +60,11 @@ namespace PwM_Library
             return (!string.IsNullOrEmpty(password) && !password.Contains(" ") && Regex.IsMatch(password, PasswordPattern) && SpecialCharCheck(password));
         }
 
+        private static bool SpecialCharCheck(string input)
+        {
+            return input.IndexOfAny(@"\|!#$%&/()=?»«@£§€{}.-;'<>_,".ToCharArray()) > -1;
+        }
+
         public static SecureString GetHiddenConsoleInput()
         {
             var pwd = new SecureString();
@@ -86,17 +91,12 @@ namespace PwM_Library
             return pwd;
         }
 
-        private static bool SpecialCharCheck(string input)
-        {
-            return input.IndexOfAny(@"\|!#$%&/()=?»«@£§€{}.-;'<>_,".ToCharArray()) > -1;
-        }
-
-        public static string ConvertSecureStringToString(this SecureString data)
+        public static string SS2S(SecureString data)
         {
             return new System.Net.NetworkCredential(string.Empty, data).Password;
         }
 
-        public static SecureString StringToSecureString(string data)
+        public static SecureString S2SS(string data)
         {
             var secureString = new SecureString();
             foreach (var c in data)

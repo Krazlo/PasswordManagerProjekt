@@ -10,12 +10,6 @@ namespace PwMLibrary
         private static readonly Encoding encoding = Encoding.UTF8;
 
 
-        /// <summary>
-        /// AES Encryption
-        /// </summary>
-        /// <param name="plainText">String input for encryption.</param>
-        /// <param name="password">Master Password</param>>
-        /// <returns>string</returns>
         public static string Encrypt(string plainText, string password)
         {
             try
@@ -49,12 +43,6 @@ namespace PwMLibrary
             }
         }
 
-        /// <summary>
-        /// AES Decryption 
-        /// </summary>
-        /// <param name="plainText">String input for decryption</param>
-        /// <param name="password">Master Password</param>
-        /// <returns>string</returns>
         public static string Decrypt(string plainText, string password)
         {
             try

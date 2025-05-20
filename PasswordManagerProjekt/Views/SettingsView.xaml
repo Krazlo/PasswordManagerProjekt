@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="PwM_UI.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:PwM_UI.ViewModels"
+             mc:Ignorable="d">
+    
+    <UserControl.DataContext>
+        <vm:SettingsViewModel />
+    </UserControl.DataContext>
+    <StackPanel Margin="20">
+        <TextBlock Text="Session timeout (minutter):" />
+        <TextBox Text="{Binding SessionTimeoutMinutes}" Width="100" />
+
+        <CheckBox Content="Aktiver biometrisk login" IsChecked="{Binding IsBiometricEnabled}" />
+
+        <TextBlock Text="Sprog:" Margin="0,10,0,0" />
+        <TextBox Text="{Binding Language}" Width="100" />
+    </StackPanel>
+</UserControl>

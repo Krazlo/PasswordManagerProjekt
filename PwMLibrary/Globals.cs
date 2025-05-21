@@ -11,7 +11,8 @@ namespace PwM_Library
     public static class Globals
     {
         public static List<string> listItems = new List<string>();
-
+        public static int vaultsCount { get; set; }
+        public static bool vaultOpen = false;
         public static bool deleteConfirmation = false;
         public static bool createConfirmation = false;
         public static bool importConfirmation = false;

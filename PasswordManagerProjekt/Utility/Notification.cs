@@ -13,8 +13,9 @@ namespace PwM_Library
         {
             Globals.gridColor = gridColor;
             Globals.messageData = messageData;
-            PopMessage popMessage = new PopMessage();
-            popMessage.ShowDialog();
+            //TODO
+            //PopMessage popMessage = new PopMessage();
+            //popMessage.ShowDialog();
         }
     }
 }

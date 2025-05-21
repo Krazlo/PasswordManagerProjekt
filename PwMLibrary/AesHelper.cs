@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Text;
 using static PwM_Library.Argon2Helper;
+using PwM_Library;
 
 namespace PwMLibrary
 {
@@ -14,27 +15,43 @@ namespace PwMLibrary
         {
             try
             {
-                var aes = Aes.Create();
+                // Generate secure random salt
+                byte[] salt = new byte[16];
+                using var rng = RandomNumberGenerator.Create();
+                rng.GetBytes(salt);
+
+                // Derive keys
+                byte[] aesKey = Argon2Helper.DeriveKey(password, salt, "encryption");
+                byte[] hmacKey = Argon2Helper.DeriveKey(password, salt, "authentication");
+
+                // Setup AES
+                using var aes = Aes.Create();
                 aes.KeySize = 256;
                 aes.BlockSize = 128;
                 aes.Padding = PaddingMode.PKCS7;
                 aes.Mode = CipherMode.CBC;
-                aes.Key = Argon2.Argon2HashPassword(password);
+                aes.Key = aesKey;
                 aes.GenerateIV();
 
-                var AESEncrypt = aes.CreateEncryptor(aes.Key, aes.IV);
-                var buffer = encoding.GetBytes(plainText);
-                var encryptedText = Convert.ToBase64String(AESEncrypt.TransformFinalBlock(buffer, 0, buffer.Length));
-                var mac = "";
-                mac = BitConverter.ToString(HmacSHA256(Convert.ToBase64String(aes.IV) + encryptedText, password)).Replace("-", "").ToLower();
-                var keyValues = new Dictionary<string, object>
+                // Encrypt
+                var encryptor = aes.CreateEncryptor();
+                byte[] buffer = encoding.GetBytes(plainText);
+                byte[] encryptedBytes = encryptor.TransformFinalBlock(buffer, 0, buffer.Length);
+                string encryptedText = Convert.ToBase64String(encryptedBytes);
+
+                // Compute HMAC
+                string ivBase64 = Convert.ToBase64String(aes.IV);
+                string mac = Convert.ToHexString(HmacSHA256(ivBase64 + encryptedText, hmacKey)).ToLower();
+
+                // Package all values
+                var keyValues = new Dictionary<string, string>
                 {
-                    { "iv", Convert.ToBase64String(aes.IV) },
+                    { "iv", ivBase64 },
                     { "value", encryptedText },
                     { "mac", mac },
+                    { "salt", Convert.ToBase64String(salt) }
                 };
-                Argon2.s_argon2.Reset();
-                Argon2.s_argon2.Dispose();
+
                 return Convert.ToBase64String(encoding.GetBytes(JsonSerializer.Serialize(keyValues)));
             }
             catch (Exception e)
@@ -43,51 +60,57 @@ namespace PwMLibrary
             }
         }
 
-        public static string Decrypt(string plainText, string password)
+
+        public static string Decrypt(string encryptedInput, string password)
         {
             try
             {
-                var aes = Aes.Create();
+                // Decode and deserialize
+                byte[] decoded = Convert.FromBase64String(encryptedInput);
+                string json = encoding.GetString(decoded);
+                var payload = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+
+                // Extract fields
+                byte[] salt = Convert.FromBase64String(payload["salt"]);
+                string ivBase64 = payload["iv"];
+                string cipherText = payload["value"];
+                string receivedMac = payload["mac"];
+
+                // Derive keys
+                byte[] aesKey = Argon2Helper.DeriveKey(password, salt, "encryption");
+                byte[] hmacKey = Argon2Helper.DeriveKey(password, salt, "authentication");
+
+                // Verify HMAC
+                string expectedMac = Convert.ToHexString(HmacSHA256(ivBase64 + cipherText, hmacKey)).ToLower();
+                if (expectedMac != receivedMac)
+                {
+                    throw new ApplicationException("MAC mismatch: data may have been tampered with.");
+                }
+
+                // Decrypt
+                using var aes = Aes.Create();
                 aes.KeySize = 256;
                 aes.BlockSize = 128;
                 aes.Padding = PaddingMode.PKCS7;
                 aes.Mode = CipherMode.CBC;
-                aes.Key = Argon2.Argon2HashPassword(password);
-               
-                var base64Decoded = Convert.FromBase64String(plainText);
-                var base64DecodedStr = encoding.GetString(base64Decoded);
-                var payload = JsonSerializer.Deserialize<Dictionary<string, string>>(base64DecodedStr);
-                string expectedMac = BitConverter.ToString(HmacSHA256(payload["iv"] + payload["value"], password)).Replace("-", "").ToLower();
-                if (expectedMac != payload["mac"])
-                {
-                    throw new ApplicationException("Error (AesHelper.Decrypt) - MAC mismatch");
-                }
+                aes.Key = aesKey;
+                aes.IV = Convert.FromBase64String(ivBase64);
 
-                aes.IV = Convert.FromBase64String(payload["iv"]);
-                var AESDecrypt = aes.CreateDecryptor(aes.Key, aes.IV);
-                var buffer = Convert.FromBase64String(payload["value"]);
-                Argon2.s_argon2.Reset();
-                Argon2.s_argon2.Dispose();
-                return encoding.GetString(AESDecrypt.TransformFinalBlock(buffer, 0, buffer.Length));
+                var decryptor = aes.CreateDecryptor();
+                byte[] cipherBytes = Convert.FromBase64String(cipherText);
+                byte[] decrypted = decryptor.TransformFinalBlock(cipherBytes, 0, cipherBytes.Length);
+
+                return encoding.GetString(decrypted);
             }
             catch (Exception e)
             {
                 return "Error decrypting: " + e.Message;
             }
         }
-
-        /// <summary>
-        /// Hash computation with SHA256
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        private static byte[] HmacSHA256(String data, String key)
+        private static byte[] HmacSHA256(string data, byte[] key)
         {
-            using (var hmac = new HMACSHA256(encoding.GetBytes(key)))
-            {
-                return hmac.ComputeHash(encoding.GetBytes(data));
-            }
+            using var hmac = new HMACSHA256(key);
+            return hmac.ComputeHash(encoding.GetBytes(data));
         }
     }
 }

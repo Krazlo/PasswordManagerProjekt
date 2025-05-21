@@ -9,8 +9,6 @@ namespace PwM_Library
 {
     public static class Argon2Helper
     {
-        public static Argon2id s_argon2;
-
         public static byte[] DeriveKey(string password, byte[] salt, string context, int length = 32)
         {
             var input = Encoding.UTF8.GetBytes(password + context);

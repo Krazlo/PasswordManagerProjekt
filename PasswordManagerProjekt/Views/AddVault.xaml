@@ -25,9 +25,22 @@
         <TextBlock Grid.Row="0" Text="Vault Name:" Margin="0,0,0,5"/>
         <TextBox Grid.Row="1" x:Name="VaultNameTextBox" Margin="0,0,0,15"/>
 
+
+
         <!-- Master Password -->
         <TextBlock Grid.Row="2" Text="Enter Master Password:" Margin="0,0,0,5"/>
-        <PasswordBox Grid.Row="3" x:Name="MasterPasswordBox" Margin="0,0,0,15"/>
+        <Grid Grid.Row="3" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="PasswordTextBox" Grid.Column="0" Visibility="Collapsed"/>
+            <PasswordBox x:Name="MasterPasswordBox" Grid.Column="0"/>
+            <Button x:Name="ToggleVisibilityButton" Grid.Column="1" 
+                    Content="👁️" Margin="0,0,0,0" Padding="0"
+                    Click="ToggleVisibilityButton_Click"
+                    ToolTip="Show/hide password"/>
+        </Grid>
 
         <!-- Confirm Master Password -->
         <TextBlock Grid.Row="4" Text="Confirm Master Password:" Margin="0,0,0,5"/>
@@ -38,7 +51,7 @@
             <Button Content="Cancel" Width="80" Margin="0,0,10,0" 
                     Style="{StaticResource SecondaryButtonStyle}"
                     Click="CancelButton_Click"/>
-            <Button Content="Create" Width="80" 
+            <Button Name="createBtn" Content="Create" Width="80" 
                     Style="{StaticResource PrimaryButtonStyle}"
                     Click="CreateButton_Click"/>
         </StackPanel>

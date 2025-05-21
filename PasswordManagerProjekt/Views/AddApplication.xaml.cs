@@ -1,5 +1,7 @@
 ﻿using System.Windows;
+using PwM_Library;
 using System.Windows.Controls;
+using Microsoft.Win32;
 
 namespace PwM_UI.Views
 {
@@ -9,32 +11,39 @@ namespace PwM_UI.Views
         {
             InitializeComponent();
             AppNameTextBox.Focus();
+
+            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged; // Exit vault on suspend.
+            SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch); // Exit vault on lock screen.
+        }
+
+        private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            switch (e.Mode)
+            {
+                case PowerModes.Suspend:
+                    Globals.closeAppConfirmation = true;
+                    this.Close();
+                    break;
+            }
+        }
+
+        private void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
+        {
+            if (e.Reason == SessionSwitchReason.SessionLock)
+            {
+                Globals.closeAppConfirmation = true;
+                this.Close();
+            }
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            // Validate inputs
-            if (string.IsNullOrWhiteSpace(AppNameTextBox.Text))
-            {
-                MessageBox.Show("Please enter an application name.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(AccountNameTextBox.Text))
-            {
-                MessageBox.Show("Please enter an account name.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (AccountPasswordBox.Password.Length == 0)
-            {
-                MessageBox.Show("Please enter a password.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            // TODO: Add application creation logic here
-            DialogResult = true;
-            Close();
+            Globals.applicationName = AppNameTextBox.Text;
+            Globals.accountName = AccountNameTextBox.Text;
+            Globals.accountPassword = AccountPasswordBox.Password;
+            Globals.closeAppConfirmation = false;
+            Utility.TextPassBoxChanges.ClearTextPassBox(AppNameTextBox, AccountNameTextBox, AccountPasswordBox);
+            this.Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)

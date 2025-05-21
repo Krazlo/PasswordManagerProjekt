@@ -4,7 +4,7 @@ using System.Text;
 using static PwM_Library.Argon2Helper;
 using PwM_Library;
 
-namespace PwMLibrary
+namespace PwM_Library
 {
     public static class AesHelper
     {

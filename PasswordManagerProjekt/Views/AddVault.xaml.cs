@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using Microsoft.Win32;
+using PwM_Library;
+using PwM_UI.Utility;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace PwM_UI.Views
 {
@@ -9,38 +13,85 @@ namespace PwM_UI.Views
         {
             InitializeComponent();
             VaultNameTextBox.Focus();
+
+            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged; // Exit vault on suspend.
+            SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch); // Exit vault on lock screen.
+        }
+
+        private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            switch (e.Mode)
+            {
+                case PowerModes.Suspend:
+                    PwM_Library.Globals.closeAppConfirmation = true;
+                    this.Close();
+                    break;
+            }
+        }
+
+
+        private void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
+        {
+            if (e.Reason == SessionSwitchReason.SessionLock)
+            {
+                PwM_Library.Globals.closeAppConfirmation = true;
+                this.Close();
+            }
+        }
+
+        private void addVPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            createBtn.IsEnabled = (ConfirmPasswordBox.Password == MasterPasswordBox.Password && MasterPasswordBox.Password.Length >= 12);
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            // Validate inputs
-            if (string.IsNullOrWhiteSpace(VaultNameTextBox.Text))
-            {
-                MessageBox.Show("Please enter a vault name.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            VaultManager.CreateVault(
+                VaultNameTextBox.Text, 
+                MasterPasswordBox.Password, 
+                ConfirmPasswordBox.Password, 
+                Globals.passwordManagerDirectory);
 
-            if (MasterPasswordBox.Password.Length < 8)
+            if (Globals.vaultChecks)
             {
-                MessageBox.Show("Master password must be at least 8 characters long.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+               TextPassBoxChanges.ClearPBoxesInput(MasterPasswordBox, ConfirmPasswordBox);
+                Globals.vaultChecks = false;
             }
-
-            if (MasterPasswordBox.Password != ConfirmPasswordBox.Password)
+            else
             {
-                MessageBox.Show("Passwords do not match.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                if (Application.Current.MainWindow is MainWindow mainWindow)
+                {
+                    if (mainWindow.VaultsView is VaultsView vaultsView)
+                    {
+                        vaultsView.RefreshVaults();
+                    }
+                }
+                this.Close();
             }
-
-            // TODO: Add vault creation logic here
-            DialogResult = true;
-            Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
             Close();
+        }
+
+        private void ToggleVisibilityButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MasterPasswordBox.Visibility == Visibility.Visible)
+            {
+                PasswordTextBox.Text = MasterPasswordBox.Password;
+                PasswordTextBox.Visibility = Visibility.Visible;
+                MasterPasswordBox.Visibility = Visibility.Collapsed;
+                ToggleVisibilityButton.Content = "🙈";
+            }
+            else
+            {
+                MasterPasswordBox.Password = PasswordTextBox.Text;
+                MasterPasswordBox.Visibility = Visibility.Visible;
+                PasswordTextBox.Visibility = Visibility.Collapsed;
+                ToggleVisibilityButton.Content = "👁️";
+            }
         }
     }
 }

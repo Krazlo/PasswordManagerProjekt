@@ -1,5 +1,7 @@
-﻿using System;
+﻿using PwM_UI.Utility;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +22,36 @@ namespace PwM_UI.Views
     /// </summary>
     public partial class VaultsView : UserControl
     {
+        private ListViewItem VaultList;
+        private string VaultPath;
         public VaultsView()
         {
             InitializeComponent();
+            LoadVaults();
         }
+
+        public void LoadVaults()
+        {
+            VaultManager.ListVaults(PwM_Library.Globals.passwordManagerDirectory,
+                                  VaultsListView,
+                                  false);
+        }
+
+        public void RefreshVaults()
+        {
+            VaultsListView.Items.Clear();
+            LoadVaults();
+        }
+
+        private void VaultsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OpenVault();
+        }
+
+        private void OpenVault()
+        {
+            //TODO
+        }
+
     }
 }

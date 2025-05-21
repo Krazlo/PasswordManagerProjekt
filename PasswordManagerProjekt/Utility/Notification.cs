@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PwM_Library;
 
-namespace PwM_Library
+namespace PwM_UI.Utility
 {
     public class Notification
     {

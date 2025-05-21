@@ -1,5 +1,4 @@
 ﻿using PwM_Library;
-using PwMLibrary;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -128,12 +127,11 @@ namespace PwM_UI.Utility
         }
 
         // Clears app list, password/text boxes from application tab, then closes it and moves to the vault tab.
-        public static void VaultClose(ListViewItem vaultListView, ListViewItem appListView, ListViewItem settingsListView,
-            ListView appList, TabControl tabControl, DispatcherTimer masterPasswordTimer)
+        public static void VaultClose(ListViewItem vaultListView, ListViewItem appListView,
+            ListView appList, TabControl tabControl)
         {
             ListViewSettings.SetListViewColor(vaultListView, false);
             ListViewSettings.SetListViewColorApp(appListView, true);
-            ListViewSettings.SetListViewColor(settingsListView, true);
             appList.Items.Clear();
             tabControl.SelectedIndex = 0;
             appListView.Foreground = Brushes.Red;

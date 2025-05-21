@@ -30,18 +30,34 @@
                 </StackPanel>
 
                 <!-- Navigation Buttons -->
-                <RadioButton x:Name="VaultsButton" GroupName="Nav" Content="Vaults" 
-                            Style="{StaticResource NavButtonStyle}" IsChecked="True"/>
-                <RadioButton x:Name="ApplicationsButton" GroupName="Nav" Content="Applications" 
-                            Style="{StaticResource NavButtonStyle}"/>
+                <StackPanel>
+                    <ListViewItem Name="vaultsListVI" ToolTip="Vaults" Height="39" Foreground="#FFDCDCDC" FontSize="18">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Name="vaultIconButton" Margin="5" Padding="8,2" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🔒" Margin="0,0,4,0" FontSize="14"/>
+                                </StackPanel>
+                            </Button>
+                            <TextBlock Name="vaultTXT" Text="Vaults" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListViewItem>
+
+                    <ListViewItem Name="appListVI" ToolTip="Applications" Height="39" Foreground="Red" FontSize="18" IsEnabled="False">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Name="appIconButton" Margin="5" Padding="8,2">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="📁" Margin="0,0,4,0"/>
+                                </StackPanel>
+                            </Button>
+                            <TextBlock Name="appTXT" Text="Applications" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListViewItem>
+                </StackPanel>
 
                 <!-- Add New Button -->
                 <Button Content="+ Add New" Margin="15,25,15,0" Style="{StaticResource AddButtonStyle}"
                         Command="{Binding AddNewCommand}"/>
 
-                <!-- Settings -->
-                <RadioButton Content="Settings" Margin="15,30,15,0" Style="{StaticResource NavButtonStyle}"
-                        HorizontalAlignment="Stretch" Command="{Binding OpenSettingsCommand}"/>
             </StackPanel>
         </Border>
 

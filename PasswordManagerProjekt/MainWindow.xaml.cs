@@ -1,23 +1,33 @@
-﻿using PwM_UI.ViewModels;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using PwM_Library;
+using PwM_UI.Views;
+using System.Threading;
 
 namespace PwM_UI
 {
     public partial class MainWindow : Window
     {
+        public VaultsView VaultsView => VaultsTab.Content as VaultsView;
+        private static string passwordManagerDir = Globals.passwordManagerDirectory;
         public MainWindow()
         {
             InitializeComponent();
-
-            DataContext = new MainWindowViewModel();
+            InitializeVaultsDirectory(passwordManagerDir);
 
             // Set initial view
             NavigateToVaults();
 
             // Setup navigation events
-            VaultsButton.Checked += (s, e) => NavigateToVaults();
-            ApplicationsButton.Checked += (s, e) => NavigateToApplications();
+            vaultIconButton.MouseLeftButtonDown += (s, e) => NavigateToVaults();
+            appIconButton.MouseLeftButtonDown += (s, e) => NavigateToApplications();
+        }
+
+        private void InitializeVaultsDirectory(string directoryName)
+        {
+            if (!Directory.Exists(directoryName))
+                Directory.CreateDirectory(directoryName);
         }
 
         private void NavigateToVaults()
@@ -25,12 +35,6 @@ namespace PwM_UI
             VaultsTab.Visibility = Visibility.Visible;
             ApplicationsTab.Visibility = Visibility.Collapsed;
             MainTabControl.SelectedItem = VaultsTab;
-
-            if (DataContext is MainWindowViewModel vm)
-            {
-                vm.ShowVaults = true;
-                vm.ShowApplications = false;
-            }
         }
 
         private void NavigateToApplications()
@@ -38,12 +42,6 @@ namespace PwM_UI
             VaultsTab.Visibility = Visibility.Collapsed;
             ApplicationsTab.Visibility = Visibility.Visible;
             MainTabControl.SelectedItem = ApplicationsTab;
-            
-            if (DataContext is MainWindowViewModel vm)
-            {
-                vm.ShowVaults = false;
-                vm.ShowApplications = true;
-            }
         }
     }
 }

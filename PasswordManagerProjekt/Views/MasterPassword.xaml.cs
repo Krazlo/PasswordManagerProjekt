@@ -27,7 +27,7 @@ namespace PwM_UI.Views
         {
             if (!PasswordService.ValidatePassword(MasterPasswordBox.Password))
             {
-                Notification.ShowNotificationInfo("orange", "Password must be at least 12 characters, and must include at least one upper case letter, one lower case letter, one numeric digit, one special character and no space!");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, "Warning: Password must be at least 12 characters, and must include at least one upper case letter, one lower case letter, one numeric digit, one special character and no space!");
                 MasterPasswordBox.Clear();
                 return;
             }

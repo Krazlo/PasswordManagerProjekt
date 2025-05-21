@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using PwM_Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace PwM_UI.Views
         public PopMessage()
         {
             InitializeComponent();
-            SetUI(PwM_Library.Globals.gridColor, PwM_Library.Globals.messageData);
+            SetUI(Globals.gridColor, PwM_Library.Globals.messageData);
             SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged; // Exit vault on suspend.
             SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch); // Exit vault on lock screen.
         }
@@ -71,23 +72,23 @@ namespace PwM_UI.Views
         /// </summary>
         /// <param name="gridColor"></param>
         /// <param name="messageData"></param>
-        private void SetUI(string gridColor, string messageData)
+        private void SetUI(int gridColor, string messageData)
         {
             switch (gridColor)
             {
-                case "green":
+                case (int)Globals.MsgLvl.Notification:
                     popGrid.Background = Brushes.Green;
                     titleTxt.Text = "Notification";
                     notificationLBL.Text = messageData;
                     break;
 
-                case "red":
+                case (int)Globals.MsgLvl.Error:
                     popGrid.Background = Brushes.Red;
                     titleTxt.Text = "ERROR";
                     notificationLBL.Text = messageData;
                     break;
 
-                case "orange":
+                case (int)Globals.MsgLvl.Warning:
                     popGrid.Background = Brushes.DarkOrange;
                     titleTxt.Text = "WARNING";
                     notificationLBL.Text = messageData;

@@ -1,5 +1,4 @@
-﻿using PwM;
-using PwM_Library;
+﻿using PwM_Library;
 using PwMLibrary;
 using System;
 using System.Collections.Generic;
@@ -406,8 +405,9 @@ namespace PwM_UI.Utility
                 {
                     Globals.accountName = account;
                     Globals.applicationName = application;
-                    DelApplications delApplications = new DelApplications();
-                    delApplications.ShowDialog();
+                    //TODO
+                    //DelApplications delApplications = new DelApplications();
+                    //delApplications.ShowDialog();
                     if (Globals.deleteConfirmation)
                     {
                         if (!Globals.masterPasswordCheck)

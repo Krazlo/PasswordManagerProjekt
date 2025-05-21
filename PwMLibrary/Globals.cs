@@ -26,12 +26,19 @@ namespace PwM_Library
         public static string accountName { get; set; }
         public static string newAccountPassword { get; set; }
         public static string vaultName { get; set; }
-        public static string gridColor { get; set; }
+        public static int gridColor { get; set; }
         public static string messageData { get; set; }
         public static bool vaultChecks = false;
         private static string s_rootPath = Path.GetPathRoot(Environment.SystemDirectory);
         private static readonly string s_accountName = Environment.UserName;
         public static readonly string passwordManagerDirectory = $"{s_rootPath}Users\\{s_accountName}\\AppData\\Local\\PwM\\";
         public static readonly string registryPath = "SOFTWARE\\PwM";
+
+        public enum MsgLvl
+        {
+            Notification = 1,
+            Error = 2,
+            Warning = 3
+        }
     }
 }

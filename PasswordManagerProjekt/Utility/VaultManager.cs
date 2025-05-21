@@ -21,33 +21,33 @@ namespace PwM_UI.Utility
                 string pathToVault = Path.Combine(vaultDirectory, $"{vaultName}.x");
                 if (File.Exists(pathToVault))
                 {
-                    Notification.ShowNotificationInfo("orange", $"Warning CreateVault: Vault {vaultName} already exist!");
+                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, $"Warning CreateVault: Vault {vaultName} already exist!");
                     Globals.vaultChecks = true;
                     return;
                 }
 
                 if (vaultName.Length < 3)
                 {
-                    Notification.ShowNotificationInfo("orange", "Warning CreateVault: Vault name must be at least 3 characters long.");
+                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, "Warning CreateVault: Vault name must be at least 3 characters long.");
                     Globals.vaultChecks = true;
                     return;
                 }
 
                 if (!PasswordService.ValidatePassword(confirmPassword))
                 {
-                    Notification.ShowNotificationInfo("orange", "Warning CreateVault: Password must be at least 12 characters and include at least 1 upper case, 1 lower case, 1 digit, 1 special character and no white space!");
+                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, "Warning CreateVault: Password must be at least 12 characters and include at least 1 upper case, 1 lower case, 1 digit, 1 special character and no white space!");
                     Globals.vaultChecks = true;
                     return;
                 }
 
                 string sealVault = AesHelper.Encrypt(string.Empty, confirmPassword);
                 File.WriteAllText(pathToVault, sealVault);
-                Notification.ShowNotificationInfo("green", $"Vault {vaultName} was created!");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Notification, $"Vault {vaultName} was created!");
                 Globals.createConfirmation = true;
             }
             catch (Exception e)
             {
-                Notification.ShowNotificationInfo("red", e.Message);
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, e.Message);
             }
         }
 
@@ -73,7 +73,7 @@ namespace PwM_UI.Utility
             string application = string.Empty;
             if (listView.SelectedItem == null)
             {
-                Notification.ShowNotificationInfo("orange", "Warning GetVaultNameFromListView: You must select a vault to delete!");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, "Warning GetVaultNameFromListView: You must select a vault to delete!");
                 return application;
             }
             string selectedItem = listView.SelectedItem.ToString();
@@ -88,17 +88,17 @@ namespace PwM_UI.Utility
                 string pathToVault = Path.Combine(Globals.passwordManagerDirectory, $"{vaultName}.x");
                 if (!File.Exists(pathToVault))
                 {
-                    Notification.ShowNotificationInfo("orange", $"Warning DeleteVault: Vault {vaultName} does not exist!");
+                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, $"Warning DeleteVault: Vault {vaultName} does not exist!");
                     return;
                 }
                 File.Delete(pathToVault);
-                Notification.ShowNotificationInfo("green", $"Vault {vaultName} was deleted!");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Notification, $"Vault {vaultName} was deleted!");
                 ListVaults(Globals.passwordManagerDirectory, vaultsList, false);
                 return;
             }
             catch (Exception e)
             {
-                Notification.ShowNotificationInfo("red", e.Message);
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, e.Message);
             }
         }
 
@@ -112,7 +112,7 @@ namespace PwM_UI.Utility
 
             if (!Directory.Exists(vaultsDirectory))
             {
-                Notification.ShowNotificationInfo("red", "Vaults directory does not exist");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, "Vaults directory does not exist");
                 return;
             }
 
@@ -162,7 +162,7 @@ namespace PwM_UI.Utility
             string newMasterPassword = PasswordService.SS2S(Globals.newMasterPassword);
             if (vaultList.SelectedItem == null)
             {
-                Notification.ShowNotificationInfo("orange", "Warning: You must select a vault to change your Master Password");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, "Warning: You must select a vault to change your Master Password");
                 return;
             }
             string vaultName = GetVaultNameFromListView(vaultList);
@@ -171,20 +171,20 @@ namespace PwM_UI.Utility
 
             if (!File.Exists(pathToVault))
             {
-                Notification.ShowNotificationInfo("red", $"Error: Vault {vaultName} does not exist!");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error: Vault {vaultName} does not exist!");
                 return;
             }
             string readVault = File.ReadAllText(pathToVault);
             string decryptVault = AesHelper.Decrypt(readVault, oldMasterPassword);
             if (decryptVault.Contains("Error decrypting"))
             {
-                Notification.ShowNotificationInfo("red", "Error: Master password invalid (or issue with vault)");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, "Error: Master password invalid (or issue with vault)");
                 return;
             }
             string encryptdata = AesHelper.Encrypt(decryptVault, newMasterPassword);
             if (!File.Exists(pathToVault))
             {
-                Notification.ShowNotificationInfo("red", $"Error: Vault {vaultName} does not exist!");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error: Vault {vaultName} does not exist!");
                 return;
             }
             try
@@ -193,10 +193,10 @@ namespace PwM_UI.Utility
             }
             catch (UnauthorizedAccessException)
             {
-                Notification.ShowNotificationInfo("red", $"Error: Unauthorized.");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error: Unauthorized.");
                 return;
             }
-            Notification.ShowNotificationInfo("green", $"New Master Password was set for {vaultName} vault!");
+            Notification.ShowNotificationInfo((int)Globals.MsgLvl.Notification, $"New Master Password was set for {vaultName} vault!");
         }
     }
 }

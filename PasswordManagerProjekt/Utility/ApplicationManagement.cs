@@ -1,4 +1,5 @@
-﻿using PwM_Library;
+﻿using PwM;
+using PwM_Library;
 using PwMLibrary;
 using System;
 using System.Collections.Generic;
@@ -29,20 +30,20 @@ namespace PwM_UI.Utility
 
                 if (!File.Exists(pathToVault))
                 {
-                    Notification.ShowNotificationInfo("red", $"Error DecryptAndPopulateList: Vault {vaultName} does not exist!");
+                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error DecryptAndPopulateList: Vault {vaultName} does not exist!");
                     return false;
                 }
 
                 if (masterPassword == null)
                 {
-                    Notification.ShowNotificationInfo("red", "Error DecryptAndPopulateList: Missing master password");
+                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, "Error DecryptAndPopulateList: Missing master password");
                     return false;
                 }
                 string readVault = File.ReadAllText(pathToVault);
                 string decryptVault = AesHelper.Decrypt(readVault, PasswordService.SS2S(masterPassword));
                 if (decryptVault.Contains("Error decrypting"))
                 {
-                    Notification.ShowNotificationInfo("red", "Error DecryptAndPopulateList: Master password is incorrect (or issue with vault)");
+                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, "Error DecryptAndPopulateList: Master password is incorrect (or issue with vault)");
                     Globals.masterPasswordCheck = false;
                     return false;
                 }
@@ -52,7 +53,7 @@ namespace PwM_UI.Utility
             }
             catch (Exception e)
             {
-                Notification.ShowNotificationInfo("red", e.Message);
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, e.Message);
                 return false;
             }
         }
@@ -63,7 +64,7 @@ namespace PwM_UI.Utility
 
             if (!File.Exists(pathToVault))
             {
-                Notification.ShowNotificationInfo("red", $"Error AddApplication: Vault {vaultName} does not exist!");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error AddApplication: Vault {vaultName} does not exist!");
                 return;
             }
 
@@ -78,7 +79,7 @@ namespace PwM_UI.Utility
                 string acc = item.ToString().SplitByText(", ", 1).Replace("Account = ", string.Empty);
                 if (app == (application) && acc == (accountName))
                 {
-                    Notification.ShowNotificationInfo("orange", $"Error AddApplication: Application {application} already contains {accountName}");
+                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, $"Error AddApplication: Application {application} already contains {accountName}");
                     return;
                 }
             }
@@ -86,13 +87,13 @@ namespace PwM_UI.Utility
             string decryptVault = AesHelper.Decrypt(readVault, PasswordService.SS2S(masterPassword));
             if (decryptVault.Contains("Error decrypting"))
             {
-                Notification.ShowNotificationInfo("red", "Error AddApplication: Master password is incorrect (or issue with vault)\"");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, "Error AddApplication: Master password is incorrect (or issue with vault)\"");
                 Globals.masterPasswordCheck = false;
                 return;
             }
             if (accountName.Length < 3)
             {
-                Notification.ShowNotificationInfo("orange", "Error AddApplication: name length less than 3");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, "Error AddApplication: name length less than 3");
                 return;
             }
             var keyValues = new Dictionary<string, object>
@@ -108,16 +109,16 @@ namespace PwM_UI.Utility
                 try
                 {
                     File.WriteAllText(pathToVault, encryptdata);
-                    Notification.ShowNotificationInfo("green", $"{application} has been encrypted and added to the vault");
+                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Notification, $"{application} has been encrypted and added to the vault");
                     return;
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    Notification.ShowNotificationInfo("red", $"Error AddApplication: Access denied.");
+                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error AddApplication: Access denied.");
                     return;
                 }
             }
-            Notification.ShowNotificationInfo("red", $"Error AddApplication: Vault {vaultName} does not exist!");
+            Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error AddApplication: Vault {vaultName} does not exist!");
             ListViewSettings.ListViewSortSetting(listView, "site/application", false);
         }
 
@@ -133,26 +134,26 @@ namespace PwM_UI.Utility
             }
             if (!File.Exists(pathToVault))
             {
-                Notification.ShowNotificationInfo("red", $"Error DeleteApplicaiton: Vault {vaultName} does not exist!");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error DeleteApplicaiton: Vault {vaultName} does not exist!");
                 return;
             }
             string readVault = File.ReadAllText(pathToVault);
             string decryptVault = AesHelper.Decrypt(readVault, PasswordService.SS2S(masterPassword));
             if (decryptVault.Contains("Error decrypting"))
             {
-                Notification.ShowNotificationInfo("red", "Error DeleteApplicaiton: Master password is incorrect (or issue with vault)");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, "Error DeleteApplicaiton: Master password is incorrect (or issue with vault)");
                 Globals.masterPasswordCheck = false;
                 return;
             }
             if (accountName.Length < 3)
             {
-                Notification.ShowNotificationInfo("orange", "Error DeleteApplicaiton: name length less than 3");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, "Error DeleteApplicaiton: name length less than 3");
                 return;
             }
 
             if (!decryptVault.Contains(application))
             {
-                Notification.ShowNotificationInfo("orange", $"Error DeleteApplicaiton: application {application} does not exist");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, $"Error DeleteApplicaiton: application {application} does not exist");
                 return;
             }
             using (var reader = new StringReader(decryptVault))
@@ -182,19 +183,19 @@ namespace PwM_UI.Utility
                         try
                         {
                             File.WriteAllText(pathToVault, encryptdata);
-                            Notification.ShowNotificationInfo("green", $"Account {accountName} for {application} was deleted");
+                            Notification.ShowNotificationInfo((int)Globals.MsgLvl.Notification, $"Account {accountName} for {application} was deleted");
                             return;
                         }
                         catch (UnauthorizedAccessException)
                         {
-                            Notification.ShowNotificationInfo("red", $"Error DeleteApplicaiton: Unauthorized.");
+                            Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error DeleteApplicaiton: Unauthorized.");
                             return;
                         }
                     }
-                    Notification.ShowNotificationInfo("orange", $"Error DeleteApplicaiton: Account {accountName} does not exist!");
+                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, $"Error DeleteApplicaiton: Account {accountName} does not exist!");
                     return;
                 }
-                Notification.ShowNotificationInfo("red", $"Error DeleteApplicaiton: Vault {vaultName} does not exist!");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error DeleteApplicaiton: Vault {vaultName} does not exist!");
             }
         }
 
@@ -206,7 +207,7 @@ namespace PwM_UI.Utility
             
             if (!File.Exists(pathToVault))
             {
-                Notification.ShowNotificationInfo("red", $"Error UpdateAccount: Vault {vaultName} does not exist");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error UpdateAccount: Vault {vaultName} does not exist");
                 return;
             }
             if (masterPassword == null)
@@ -219,17 +220,17 @@ namespace PwM_UI.Utility
             if (decryptVault.Contains("Error decrypting"))
             {
                 Globals.masterPasswordCheck = false;
-                Notification.ShowNotificationInfo("red", "Error UpdateAccount: Master password incorrect (or issue with vault)");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, "Error UpdateAccount: Master password incorrect (or issue with vault)");
                 return;
             }
             if (accountName.Length < 3)
             {
-                Notification.ShowNotificationInfo("orange", "Error UpdateAccount: length less than 3");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, "Error UpdateAccount: length less than 3");
                 return;
             }
             if (!decryptVault.Contains(application))
             {
-                Notification.ShowNotificationInfo("orange", $"Error UpdateAccount: application {application} does not exist!");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, $"Error UpdateAccount: application {application} does not exist!");
                 return;
             }
             using (var reader = new StringReader(decryptVault))
@@ -268,19 +269,19 @@ namespace PwM_UI.Utility
                         try
                         {
                             File.WriteAllText(pathToVault, encryptdata);
-                            Notification.ShowNotificationInfo("green", $"Success: Password for account {accountName} for {application} application was updated!");
+                            Notification.ShowNotificationInfo((int)Globals.MsgLvl.Notification, $"Success: Password for account {accountName} for {application} application was updated!");
                             return;
                         }
                         catch (UnauthorizedAccessException)
                         {
-                            Notification.ShowNotificationInfo("red", $"Error UpdateAccount: Unauthorized");
+                            Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error UpdateAccount: Unauthorized");
                             return;
                         }
                     }
-                    Notification.ShowNotificationInfo("orange", $"Warning: Account {accountName} does not exist!");
+                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, $"Warning: Account {accountName} does not exist!");
                     return;
                 }
-                Notification.ShowNotificationInfo("red", $"Error: vault {vaultName} does not exist!");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error: vault {vaultName} does not exist!");
             }
             ListViewSettings.ListViewSortSetting(listView, "site/application", false);
         }
@@ -292,7 +293,7 @@ namespace PwM_UI.Utility
             ListView tempListView = new ListView();
             if (listView.SelectedItem == null)
             {
-                Notification.ShowNotificationInfo("orange", "Warning: You must first select an application");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, "Warning: You must first select an application");
                 return;
             }
 
@@ -386,7 +387,7 @@ namespace PwM_UI.Utility
                         {
                             outPass = outJson["password"];
                             Globals.accountPassword = outJson["password"];
-                            Notification.ShowNotificationInfo("green", $"Password for {account} is copied to clipboard!");
+                            Notification.ShowNotificationInfo((int)Globals.MsgLvl.Notification, $"Password for {account} is copied to clipboard!");
                         }
                     }
                 }
@@ -405,9 +406,8 @@ namespace PwM_UI.Utility
                 {
                     Globals.accountName = account;
                     Globals.applicationName = application;
-                    //TODO
-                    //DelApplications delApplications = new DelApplications();
-                    //delApplications.ShowDialog();
+                    DelApplications delApplications = new DelApplications();
+                    delApplications.ShowDialog();
                     if (Globals.deleteConfirmation)
                     {
                         if (!Globals.masterPasswordCheck)
@@ -424,7 +424,7 @@ namespace PwM_UI.Utility
             }
             else
             {
-                Notification.ShowNotificationInfo("orange", "Warning DeleteSelectedItem: You must select an application to delete!");
+                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, "Warning DeleteSelectedItem: You must select an application to delete!");
             }
             ListViewSettings.ListViewSortSetting(listView, "site/application", false);
         }

@@ -10,7 +10,7 @@
         <Grid Name="popGrid" VerticalAlignment="Top" Height="39" Background="DarkOrchid" >
             <TextBlock Text="notification status" Name="titleTxt" TextAlignment="Center" HorizontalAlignment="Center" Foreground="#f3f5f2" FontSize="18" Margin="65,6,77,4" Width="246" RenderTransformOrigin="0.5,0.5"/>
         </Grid>
-        <Button Name="confirmBTN" Foreground="#FFE1DDEE" Content="OK" HorizontalAlignment="Left" Margin="319,144,0,0" VerticalAlignment="Top" Width="71" Height="30" Click="confirmBTN_Click" IsDefault="True"/>
+        <Button Name="confirmBTN" Foreground="#FFE1DDEE" Content="OK" HorizontalAlignment="Center" Margin="0,109,0,0" VerticalAlignment="Top" Width="72" Height="30" Click="confirmBTN_Click" IsDefault="True"/>
         <TextBox Name="notificationLBL" IsReadOnly="True" Background="#f3f5f2" BorderThickness="0" Text="notificationArea" HorizontalAlignment="Center" Margin="0,50,0,0" VerticalAlignment="Top" Foreground="#0d0300" FontSize="14" Height="89" TextWrapping="Wrap" AcceptsReturn="True" RenderTransformOrigin="0.469,1.118" Width="357"/>
     </Grid>
 </Window>

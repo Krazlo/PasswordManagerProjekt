@@ -24,16 +24,11 @@ namespace PwM_UI.Views
         public PopMessage()
         {
             InitializeComponent();
-            SetUI(Globals.gridColor, PwM_Library.Globals.messageData);
+            SetUI(Globals.gridColor, Globals.messageData);
             SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged; // Exit vault on suspend.
             SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch); // Exit vault on lock screen.
         }
 
-        /// <summary>
-        /// Check if PC enters sleep or hibernate mode and closes window.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
         {
             switch (e.Mode)
@@ -44,34 +39,17 @@ namespace PwM_UI.Views
             }
         }
 
-
-        /// <summary>
-        /// Check if lock screen and closes window.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
         {
             if (e.Reason == SessionSwitchReason.SessionLock)
                 this.Close();
         }
 
-        /// <summary>
-        /// Close button
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void confirmBTN_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-
-        /// <summary>
-        /// Setting the proper color for a specific message (error, notification, warning)
-        /// </summary>
-        /// <param name="gridColor"></param>
-        /// <param name="messageData"></param>
         private void SetUI(int gridColor, string messageData)
         {
             switch (gridColor)

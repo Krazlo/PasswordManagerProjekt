@@ -1,4 +1,5 @@
 ﻿using PwM_Library;
+using PwM_UI.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,12 +39,11 @@ namespace PwM_UI.Utility
         {
             SecureString password = null;
             Globals.vaultName = vaultName;
-            //TODO
-            /*MasterPassword masterPassword = new MasterPassword();
+            MasterPassword masterPassword = new MasterPassword(Globals.vaultName);
             masterPassword.ShowDialog();
             password = masterPassword.masterPassword;
-            masterPassword.masterPasswordPWD.Clear();
-            masterPassword.masterPassword = null;*/
+            masterPassword.masterPassword.Clear();
+            masterPassword.masterPassword = null;
             return password;
         }
     }

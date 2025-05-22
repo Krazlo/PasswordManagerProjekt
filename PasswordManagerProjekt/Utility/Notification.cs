@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PwM_Library;
+using PwM_UI.Views;
 
 namespace PwM_UI.Utility
 {
@@ -14,9 +15,8 @@ namespace PwM_UI.Utility
         {
             Globals.gridColor = gridColor;
             Globals.messageData = messageData;
-            //TODO
-            //PopMessage popMessage = new PopMessage();
-            //popMessage.ShowDialog();
+            PopMessage popMessage = new PopMessage();
+            popMessage.ShowDialog();
         }
     }
 }

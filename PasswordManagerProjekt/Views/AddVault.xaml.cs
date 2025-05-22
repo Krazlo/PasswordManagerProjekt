@@ -58,6 +58,7 @@ namespace PwM_UI.Views
 
             if (Globals.vaultChecks)
             {
+               VaultNameTextBox.Clear();
                TextPassBoxChanges.ClearPBoxesInput(MasterPasswordBox, ConfirmPasswordBox);
                 Globals.vaultChecks = false;
             }

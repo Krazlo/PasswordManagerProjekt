@@ -2,6 +2,8 @@
 This is a local, offline Password Manager. 
 Files are saved locally to your AppData folder. 
 
+Ignore PWM_API. It is deleted but I am not sure why it still shows up in the Repo.
+
 Run PwM_UI as Startup Project.
 
 Press "Add Vault" to Create a Vault

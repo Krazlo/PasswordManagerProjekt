@@ -33,7 +33,7 @@
                 <StackPanel>
                     <ListViewItem Name="vaultsListVI" ToolTip="Vaults" Height="39" Foreground="#FFDCDCDC" FontSize="18">
                         <StackPanel Orientation="Horizontal">
-                            <Button Name="vaultIconButton" Margin="5" Padding="8,2" VerticalAlignment="Center">
+                            <Button Name="vaultIconButton" Margin="5" Padding="8,2" VerticalAlignment="Center" Width="93">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="🔒" Margin="0,0,4,0" FontSize="14"/>
                                 </StackPanel>
@@ -44,9 +44,9 @@
 
                     <ListViewItem Name="appListVI" ToolTip="Applications" Height="39" Foreground="Red" FontSize="18" IsEnabled="False">
                         <StackPanel Orientation="Horizontal">
-                            <Button Name="appIconButton" Margin="5" Padding="8,2">
+                            <Button Name="appIconButton" Margin="5" Padding="8,2" Width="93">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="📁" Margin="0,0,4,0"/>
+                                    <TextBlock Text="📁" Margin="0,-4,4,0"/>
                                 </StackPanel>
                             </Button>
                             <TextBlock Name="appTXT" Text="Applications" VerticalAlignment="Center"/>

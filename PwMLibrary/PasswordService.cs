@@ -18,7 +18,7 @@ namespace PwM_Library
             private const string Digits = "0123456789";
             private const string Symbols = "`~!@#$%^&*()-_=+[]{}\\|;:'\\,<.>/?";
 
-            private static string GeneratePassword(int length = 12)
+            public static string GeneratePassword(int length = 12)
             {
                 if (length < 12)
                 {
@@ -47,6 +47,12 @@ namespace PwM_Library
             }
         }
 
+        public static bool ValidatePassword(SecureString securePassword)
+        {
+            string password = SS2S(securePassword);
+            return ValidatePassword(password);
+        }
+
         public static bool ValidatePassword(string password)
         {
 
@@ -63,32 +69,6 @@ namespace PwM_Library
         private static bool SpecialCharCheck(string input)
         {
             return input.IndexOfAny(@"\|!#$%&/()=?»«@£§€{}.-;'<>_,".ToCharArray()) > -1;
-        }
-
-        public static SecureString GetHiddenConsoleInput()
-        {
-            var pwd = new SecureString();
-            while (true)
-            {
-                var i = Console.ReadKey(true);
-                if (i.Key == ConsoleKey.Enter)
-                {
-                    break;
-                }
-
-                if (i.Key == ConsoleKey.Backspace)
-                {
-                    if (pwd.Length <= 0) continue;
-                    pwd.RemoveAt(pwd.Length - 1);
-                    Console.Write("\b \b");
-                }
-                else if (i.KeyChar != '\u0000')
-                {
-                    pwd.AppendChar(i.KeyChar);
-                    Console.Write("*");
-                }
-            }
-            return pwd;
         }
 
         public static string SS2S(SecureString data)

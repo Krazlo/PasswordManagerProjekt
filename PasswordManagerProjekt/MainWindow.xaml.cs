@@ -43,5 +43,11 @@ namespace PwM_UI
             ApplicationsTab.Visibility = Visibility.Visible;
             MainTabControl.SelectedItem = ApplicationsTab;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            AddVault addVault = new AddVault();
+            addVault.ShowDialog();
+        }
     }
 }

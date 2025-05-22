@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using PwM_Library;
 using PwM_UI.Utility;
+using System.Security;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -46,6 +47,9 @@ namespace PwM_UI.Views
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
+            string password = MasterPasswordBox.Password;
+
+            //Validation done in CreateVault
             VaultManager.CreateVault(
                 VaultNameTextBox.Text, 
                 MasterPasswordBox.Password, 
@@ -92,6 +96,15 @@ namespace PwM_UI.Views
                 PasswordTextBox.Visibility = Visibility.Collapsed;
                 ToggleVisibilityButton.Content = "👁️";
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string password = PasswordService.PasswordGenerator.GeneratePassword();
+
+            MasterPasswordBox.Password = password;
+            ConfirmPasswordBox.Password = password;
+            
         }
     }
 }

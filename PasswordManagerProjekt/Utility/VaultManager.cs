@@ -62,27 +62,6 @@ namespace PwM_UI.Utility
             return application;
         }
 
-        private static void DeleteVault(string vaultName, string vaultDirectory, ListView vaultsList)
-        {
-            try
-            {
-                string pathToVault = Path.Combine(Globals.passwordManagerDirectory, $"{vaultName}.x");
-                if (!File.Exists(pathToVault))
-                {
-                    Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, $"Warning DeleteVault: Vault {vaultName} does not exist!");
-                    return;
-                }
-                File.Delete(pathToVault);
-                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Notification, $"Vault {vaultName} was deleted!");
-                ListVaults(Globals.passwordManagerDirectory, vaultsList, false);
-                return;
-            }
-            catch (Exception e)
-            {
-                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, e.Message);
-            }
-        }
-
         public static void ListVaults(string vaultsDirectory, ListView listView, bool enableShare)
         {
             Globals.vaultsCount = 0;
@@ -118,49 +97,6 @@ namespace PwM_UI.Utility
                 vaultPath = vaultPath.Replace(" }", "");
             }
             return vaultPath;
-        }
-
-        public static void ChangeMassterPassword(ListView vaultList)
-        {
-            string oldMasterPassword = PasswordService.SS2S(Globals.masterPassword);
-            string newMasterPassword = PasswordService.SS2S(Globals.newMasterPassword);
-            if (vaultList.SelectedItem == null)
-            {
-                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Warning, "Warning: You must select a vault to change your Master Password");
-                return;
-            }
-            string vaultName = GetVaultNameFromListView(vaultList);
-            string pathToVault = pathToVault = Path.Combine(Globals.passwordManagerDirectory, $"{vaultName}.x");
-            string vaultPath = GetVaultPathFromList(vaultList);
-
-            if (!File.Exists(pathToVault))
-            {
-                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error: Vault {vaultName} does not exist!");
-                return;
-            }
-            string readVault = File.ReadAllText(pathToVault);
-            string decryptVault = AesHelper.Decrypt(readVault, oldMasterPassword);
-            if (decryptVault.Contains("Error decrypting"))
-            {
-                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, "Error: Master password invalid (or issue with vault)");
-                return;
-            }
-            string encryptdata = AesHelper.Encrypt(decryptVault, newMasterPassword);
-            if (!File.Exists(pathToVault))
-            {
-                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error: Vault {vaultName} does not exist!");
-                return;
-            }
-            try
-            {
-                File.WriteAllText(pathToVault, encryptdata);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, $"Error: Unauthorized.");
-                return;
-            }
-            Notification.ShowNotificationInfo((int)Globals.MsgLvl.Notification, $"New Master Password was set for {vaultName} vault!");
         }
     }
 }

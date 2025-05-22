@@ -166,13 +166,11 @@ namespace PwM_UI.Utility
                             tempListView.Items.Add(new { Application = outJson["site/application"], Account = outJson["account"], Password = outJson["password"] });
                         else
                         {
-                            var isBreachMask = false;
                             foreach (var item in Globals.listItems)
                             {
                                 var jsonSplit = item.Split(',');
                                 if (jsonSplit[0].Contains(outJson["site/application"]) && jsonSplit[1].Contains(outJson["account"]) && jsonSplit[2].Contains("\u24B7"))
                                 {
-                                    isBreachMask = true;
                                     break;
                                 }
                             }

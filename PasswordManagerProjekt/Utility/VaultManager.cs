@@ -121,25 +121,9 @@ namespace PwM_UI.Utility
                 Globals.vaultsCount++;
                 if (file.Name.EndsWith(".x"))
                 {
-                    listView.Items.Add(new { Name = file.Name.Substring(0, file.Name.Length - 2), CreateDate = file.CreationTime, SharePoint = "Local Stored" });
+                    listView.Items.Add(new { Name = file.Name.Substring(0, file.Name.Length - 2), CreateDate = file.CreationTime });
                 }
             }
-        }
-
-        // Clears app list, password/text boxes from application tab, then closes it and moves to the vault tab.
-        public static void VaultClose(ListViewItem vaultListView, ListViewItem appListView,
-            ListView appList, TabControl tabControl)
-        {
-            ListViewSettings.SetListViewColor(vaultListView, false);
-            ListViewSettings.SetListViewColorApp(appListView, true);
-            appList.Items.Clear();
-            tabControl.SelectedIndex = 0;
-            appListView.Foreground = Brushes.Red;
-            appListView.IsEnabled = false;
-            Globals.masterPassword = null;
-            Globals.vaultOpen = false;
-            AppManagement.vaultSecure = null;
-            GC.Collect();
         }
 
         public static string GetVaultPathFromList(ListView listView)
@@ -147,8 +131,8 @@ namespace PwM_UI.Utility
             string vaultPath = string.Empty;
             if (listView.SelectedItem != null)
             {
-                string item = listView.SelectedItem.ToString();
-                vaultPath = item.Split(',')[2].Replace(" SharePoint = ", "");
+                dynamic item = listView.SelectedItem;
+                vaultPath = item.Name;
                 vaultPath = vaultPath.Replace(" }", "");
             }
             return vaultPath;

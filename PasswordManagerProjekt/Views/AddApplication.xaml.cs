@@ -51,5 +51,30 @@ namespace PwM_UI.Views
             DialogResult = false;
             Close();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string password = PasswordService.PasswordGenerator.GeneratePassword();
+
+            AccountPasswordBox.Password = password;
+        }
+
+        private void ToggleVisibilityButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (AccountPasswordBox.Visibility == Visibility.Visible)
+            {
+                PasswordTextBox.Text = AccountPasswordBox.Password;
+                PasswordTextBox.Visibility = Visibility.Visible;
+                AccountPasswordBox.Visibility = Visibility.Collapsed;
+                ToggleVisibilityButton.Content = "🙈";
+            }
+            else
+            {
+                AccountPasswordBox.Password = PasswordTextBox.Text;
+                AccountPasswordBox.Visibility = Visibility.Visible;
+                PasswordTextBox.Visibility = Visibility.Collapsed;
+                ToggleVisibilityButton.Content = "👁️";
+            }
+        }
     }
 }

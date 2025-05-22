@@ -39,11 +39,11 @@ namespace PwM_UI.Utility
         {
             SecureString password = null;
             Globals.vaultName = vaultName;
-            MasterPassword masterPassword = new MasterPassword(Globals.vaultName);
+            MasterPassword masterPassword = new MasterPassword(vaultName);
             masterPassword.ShowDialog();
             password = masterPassword.masterPassword;
-            masterPassword.masterPassword.Clear();
-            masterPassword.masterPassword = null;
+            //masterPassword.masterPassword.Clear();
+            //masterPassword.masterPassword = null;
             return password;
         }
     }

@@ -1,4 +1,5 @@
-﻿using PwM_UI.Utility;
+﻿using PwM_Library;
+using PwM_UI.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -22,8 +24,8 @@ namespace PwM_UI.Views
     /// </summary>
     public partial class VaultsView : UserControl
     {
-        private ListViewItem VaultList;
-        private string VaultPath;
+        public Action OnVaultOpened;
+
         public VaultsView()
         {
             InitializeComponent();
@@ -32,7 +34,7 @@ namespace PwM_UI.Views
 
         public void LoadVaults()
         {
-            VaultManager.ListVaults(PwM_Library.Globals.passwordManagerDirectory,
+            VaultManager.ListVaults(Globals.passwordManagerDirectory,
                                   VaultsListView,
                                   false);
         }
@@ -45,13 +47,40 @@ namespace PwM_UI.Views
 
         private void VaultsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            OpenVault();
+            if (VaultsListView.SelectedItem != null)
+            {
+                dynamic selected = VaultsListView.SelectedItem;
+                if (!OpenVault()) 
+                {
+                    return;
+                }
+
+                OnVaultOpened.Invoke();
+            }
+
         }
 
-        private void OpenVault()
+        private bool OpenVault()
         {
-            //TODO
-        }
+            string vaultPath = VaultManager.GetVaultPathFromList(VaultsListView);
+            string item = VaultsListView.SelectedItem.ToString();
+            string vaultName = item.Split(',')[0].Replace("{ Name = ", "");
+            var vaultFullPath = $"{vaultPath}\\{vaultName}.x";
+            var masterPassword = UtilityFunctions.LoadMasterPassword(vaultName);
 
+            Globals.masterPassword = masterPassword;
+            if (masterPassword != null)
+            {
+                Globals.vaultName = vaultName;
+                Globals.vaultOpen = true;
+                Globals.vaultPath = vaultPath;
+
+                return true;
+            }
+            Globals.vaultName = "";
+            Globals.vaultOpen = false;
+            Globals.vaultPath = "";
+            return false;
+        }
     }
 }

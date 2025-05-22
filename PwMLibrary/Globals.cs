@@ -13,6 +13,7 @@ namespace PwM_Library
         public static List<string> listItems = new List<string>();
         public static int vaultsCount { get; set; }
         public static bool vaultOpen = false;
+        public static string vaultPath { get; set; }
         public static bool deleteConfirmation = false;
         public static bool createConfirmation = false;
         public static bool importConfirmation = false;
@@ -32,7 +33,6 @@ namespace PwM_Library
         private static string s_rootPath = Path.GetPathRoot(Environment.SystemDirectory);
         private static readonly string s_accountName = Environment.UserName;
         public static readonly string passwordManagerDirectory = $"{s_rootPath}Users\\{s_accountName}\\AppData\\Local\\PwM\\";
-        public static readonly string registryPath = "SOFTWARE\\PwM";
 
         public enum MsgLvl
         {

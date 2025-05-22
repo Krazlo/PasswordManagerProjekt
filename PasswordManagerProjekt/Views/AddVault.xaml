@@ -55,6 +55,5 @@
                     Style="{StaticResource PrimaryButtonStyle}"
                     Click="CreateButton_Click"/>
         </StackPanel>
-        <Button Content="Generate Secure Password! (Recommended)" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Click="Button_Click"/>
     </Grid>
 </Window>

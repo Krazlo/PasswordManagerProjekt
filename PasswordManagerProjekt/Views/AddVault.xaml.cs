@@ -99,13 +99,5 @@ namespace PwM_UI.Views
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            string password = PasswordService.PasswordGenerator.GeneratePassword();
-
-            MasterPasswordBox.Password = password;
-            ConfirmPasswordBox.Password = password;
-            
-        }
     }
 }

@@ -33,23 +33,12 @@
                 <StackPanel>
                     <ListViewItem Name="vaultsListVI" ToolTip="Vaults" Height="39" Foreground="#FFDCDCDC" FontSize="18">
                         <StackPanel Orientation="Horizontal">
-                            <Button Name="vaultIconButton" Margin="5" Padding="8,2" VerticalAlignment="Center" Width="93">
+                            <Button Name="vaultIconButton" Margin="5" Padding="8,2" VerticalAlignment="Center" Width="93" Click="vaultIconButton_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="🔒" Margin="0,0,4,0" FontSize="14"/>
                                 </StackPanel>
                             </Button>
                             <TextBlock Name="vaultTXT" Text="Vaults" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </ListViewItem>
-
-                    <ListViewItem Name="appListVI" ToolTip="Applications" Height="39" Foreground="Red" FontSize="18" IsEnabled="False">
-                        <StackPanel Orientation="Horizontal">
-                            <Button Name="appIconButton" Margin="5" Padding="8,2" Width="93">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="📁" Margin="0,-4,4,0"/>
-                                </StackPanel>
-                            </Button>
-                            <TextBlock Name="appTXT" Text="Applications" VerticalAlignment="Center"/>
                         </StackPanel>
                     </ListViewItem>
                 </StackPanel>
@@ -91,14 +80,14 @@
             </Border>
 
             <!-- Content View -->
-            <TabControl x:Name="MainTabControl" Grid.Row="1" BorderThickness="0">
-                <TabItem x:Name="VaultsTab" Visibility="{Binding ShowVaults, Converter={StaticResource BoolToVisibility}}">
-                    <local:VaultsView DataContext="{Binding VaultsViewModel}"/>
-                </TabItem>
-                <TabItem x:Name="ApplicationsTab" Visibility="{Binding ShowApplications, Converter={StaticResource BoolToVisibility}}">
-                    <local:ApplicationsView DataContext="{Binding ApplicationsViewModel}"/>
-                </TabItem>
-            </TabControl>
+                <TabControl x:Name="MainTabControl" Grid.Row="1" BorderThickness="0">
+                    <TabItem x:Name="VaultsTab" Visibility="{Binding ShowVaults, Converter={StaticResource BoolToVisibility}}">
+                        <local:VaultsView DataContext="{Binding VaultsViewModel}"/>
+                    </TabItem>
+                    <TabItem x:Name="ApplicationsTab" Visibility="{Binding ShowApplications, Converter={StaticResource BoolToVisibility}}">
+                        <local:ApplicationsView DataContext="{Binding ApplicationsViewModel}"/>
+                    </TabItem>
+                </TabControl>
         </Grid>
     </Grid>
 </Window>

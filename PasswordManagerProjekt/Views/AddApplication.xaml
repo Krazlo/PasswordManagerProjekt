@@ -13,12 +13,23 @@
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <!-- App name label -->
             <RowDefinition Height="Auto"/>
+            <!-- App name input -->
             <RowDefinition Height="Auto"/>
+            <!-- Account name label -->
             <RowDefinition Height="Auto"/>
+            <!-- Account name input -->
             <RowDefinition Height="Auto"/>
+            <!-- Password label -->
+            <RowDefinition Height="Auto"/>
+            <!-- Password input grid -->
+            <RowDefinition Height="Auto"/>
+            <!-- Generate button -->
             <RowDefinition Height="*"/>
+            <!-- Spacer if needed -->
             <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
         </Grid.RowDefinitions>
 
         <!-- Application Name -->
@@ -29,16 +40,37 @@
         <TextBlock Grid.Row="2" Text="Account Name:" Margin="0,0,0,5"/>
         <TextBox Grid.Row="3" x:Name="AccountNameTextBox" Margin="0,0,0,15"/>
 
-        <!-- Account Password -->
-        <TextBlock Grid.Row="4" Text="Account Password:" Margin="0,0,0,5"/>
-        <PasswordBox Grid.Row="5" x:Name="AccountPasswordBox" Margin="0,0,0,5" VerticalAlignment="Top"/>
+        <!-- Password -->
+        <TextBlock Grid.Row="4" Text="Enter Account Password:" Margin="0,0,0,5"/>
+        <Grid Grid.Row="5" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- PasswordBox and TextBox stacked in same column -->
+            <PasswordBox x:Name="AccountPasswordBox" Grid.Column="0" Padding="5" />
+            <TextBox x:Name="PasswordTextBox" Grid.Column="0" Padding="5" Visibility="Collapsed" />
+
+            <!-- Eye button -->
+            <Button x:Name="ToggleVisibilityButton" Grid.Column="1"
+                    Content="👁️" Padding="5" Margin="5,0,0,0"
+                    VerticalAlignment="Center"
+                    ToolTip="Show/hide password"
+                    Click="ToggleVisibilityButton_Click" />
+        </Grid>
+
+        <!-- Generate Password Button -->
+        <Button Grid.Row="7" Content="Generate Secure Password! (Recommended)"
+                HorizontalAlignment="Center"
+                Click="Button_Click" Margin="0,18,0,39"/>
 
         <!-- Buttons -->
-        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Cancel" Width="80" Margin="0,0,10,0" 
+        <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Cancel" Width="80" Margin="0,0,10,0"
                     Style="{StaticResource SecondaryButtonStyle}"
                     Click="CancelButton_Click"/>
-            <Button Content="Add" Width="80" 
+            <Button Content="Add" Width="80"
                     Style="{StaticResource PrimaryButtonStyle}"
                     Click="AddButton_Click"/>
         </StackPanel>

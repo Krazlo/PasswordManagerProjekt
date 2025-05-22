@@ -42,28 +42,10 @@ namespace PwM_UI.Utility
                 string sealVault = AesHelper.Encrypt(string.Empty, confirmPassword);
                 File.WriteAllText(pathToVault, sealVault);
                 Notification.ShowNotificationInfo((int)Globals.MsgLvl.Notification, $"Vault {vaultName} was created!");
-                Globals.createConfirmation = true;
             }
             catch (Exception e)
             {
                 Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, e.Message);
-            }
-        }
-
-        public static void DeleteVaultItem(ListView listView, string vaultDirectory)
-        {
-            string vault = GetVaultNameFromListView(listView);
-            if (vault.Length > 0)
-            {
-                Globals.vaultName = vault;
-                //TODO
-                //DeleteVault deleteVault = new DeleteVault();
-                //deleteVault.ShowDialog();
-                if (Globals.deleteConfirmation)
-                {
-                    DeleteVault(vault, vaultDirectory, listView);
-                    UtilityFunctions.VariablesClear();
-                }
             }
         }
 

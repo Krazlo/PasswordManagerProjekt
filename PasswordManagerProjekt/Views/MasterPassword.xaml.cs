@@ -49,7 +49,7 @@ namespace PwM_UI.Views
                 MasterPasswordBox.Clear();
                 return;
             }
-            Globals.masterPasswordCheck = true;
+            Globals.checkMasterPassword = false;
             Globals.masterPassword = MasterPasswordBox.SecurePassword;
             masterPassword = MasterPasswordBox.SecurePassword;
             this.Close();

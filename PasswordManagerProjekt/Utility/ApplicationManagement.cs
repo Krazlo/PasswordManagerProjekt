@@ -44,7 +44,7 @@ namespace PwM_UI.Utility
                 if (decryptVault.Contains("Error decrypting"))
                 {
                     Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, "Error DecryptAndPopulateList: Master password is incorrect (or issue with vault)");
-                    Globals.masterPasswordCheck = false;
+                    Globals.checkMasterPassword = true;
                     return false;
                 }
 
@@ -104,7 +104,7 @@ namespace PwM_UI.Utility
             if (decryptVault.Contains("Error decrypting"))
             {
                 Notification.ShowNotificationInfo((int)Globals.MsgLvl.Error, "Error AddApplication: Master password is incorrect (or issue with vault)\"");
-                Globals.masterPasswordCheck = false;
+                Globals.checkMasterPassword = true;
                 return;
             }
             if (accountName.Length < 3)

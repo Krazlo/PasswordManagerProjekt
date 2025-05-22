@@ -52,7 +52,10 @@ namespace PwM_UI
             VaultsTab.Visibility = Visibility.Visible;
             ApplicationsTab.Visibility = Visibility.Collapsed;
             MainTabControl.SelectedItem = VaultsTab;
+
+            AddButton.Content = "Add Vault";
             Globals.vaultOpen = false;
+            Globals.checkMasterPassword = true;
         }
 
         private void NavigateToApplications()
@@ -60,6 +63,9 @@ namespace PwM_UI
             VaultsTab.Visibility = Visibility.Collapsed;
             ApplicationsTab.Visibility = Visibility.Visible;
             MainTabControl.SelectedItem = ApplicationsTab;
+
+            AddButton.Content = "Add Application";
+            Globals.vaultOpen = false;
 
             ApplicationsView?.RefreshApplicationListView();
         }

@@ -32,7 +32,6 @@ namespace PwM_UI.Utility
             Globals.accountName = "";
             Globals.newAccountPassword = "";
             Globals.closeAppConfirmation = false;
-            Globals.deleteConfirmation = false;
         }
 
         public static SecureString LoadMasterPassword(string vaultName)

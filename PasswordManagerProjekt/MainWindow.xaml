@@ -44,7 +44,7 @@
                 </StackPanel>
 
                 <!-- Add New Button -->
-                <Button Content="+ Add Vault" Margin="15,25,15,0" Style="{StaticResource AddButtonStyle}"
+                <Button Name="AddButton" Content="+ Add Vault" Margin="15,25,15,0" Style="{StaticResource AddButtonStyle}"
                         Command="{Binding AddNewCommand}" Click="Button_Click"/>
                 
 

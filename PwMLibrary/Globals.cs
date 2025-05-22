@@ -14,14 +14,10 @@ namespace PwM_Library
         public static int vaultsCount { get; set; }
         public static bool vaultOpen = false;
         public static string vaultPath { get; set; }
-        public static bool deleteConfirmation = false;
-        public static bool createConfirmation = false;
-        public static bool importConfirmation = false;
-        public static bool updatePwdConfirmation = false;
         public static bool closeAppConfirmation = false;
         public static SecureString masterPassword { get; set; }
         public static SecureString newMasterPassword { get; set; }
-        public static bool masterPasswordCheck = true;
+        public static bool checkMasterPassword = true;
         public static string applicationName { get; set; }
         public static string accountPassword { get; set; }
         public static string accountName { get; set; }

@@ -43,7 +43,7 @@ namespace PwM_UI.Views
 
         public void AddApplication()
         {
-            if (Globals.masterPasswordCheck)
+            if (Globals.checkMasterPassword)
             {
                 var masterPassword = UtilityFunctions.LoadMasterPassword(Globals.vaultName);
                 AppManagement.AddApplication(ApplicationsList, Globals.vaultName, Globals.applicationName, Globals.accountName, Globals.accountPassword, masterPassword, Globals.vaultPath);
